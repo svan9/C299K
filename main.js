@@ -8,9 +8,28 @@ async function getImage(url) {
 (async function () {
     const infofile = await (await fetch("./text.json")).json();
 
-    $.each($(".text"), async function () {
-        $(this).html(infofile.text[$(this).attr("src")]);
-    });
+    let local = "right";
+    let left = $(".left.side")[0];
+    let right = $(".right.side")[0];
+
+    for (let i = 0; i < infofile.image.count; i++) {
+        if (local == "right") {
+            right.innerHTML += `<div class="text" src="${i}">${infofile.text[i]}</div>`;
+            left.innerHTML += `<img src="./images/${i + 1}.jpg" alt="${
+                i + 1
+            }" />`;
+            local = "left";
+        } else if (local == "left") {
+            right.innerHTML += `<img src="./images/${i + 1}.jpg" alt="${
+                i + 1
+            }" />`;
+            left.innerHTML += `<div class="text" src="${i}">${infofile.text[i]}</div>`;
+            local = "right";
+        }
+    }
+    // $.each($(".text"), async function () {
+    //     $(this).html(infofile.text[$(this).attr("src")]);
+    // });
 })();
 
 var is_mobile =
@@ -77,4 +96,6 @@ if (document.body.clientWidth <= 1000 && document.body.clientWidth > 700) {
         smooth: 1.5,
         effects: true,
     });
+
+    new ScrollTrigger({});
 }
